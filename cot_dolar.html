@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultor de Cotação de Dólar</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Consultor de Cotação de Dólar</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Exercicios_Geral/cotar_dolar.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            Este sistema consulta automaticamente a cotação do dólar fornecida pelo Banco Central do Brasil (via API PTAX). Ele recebe datas no formato “MMDDYYYY”, converte para o formato aceito pela API, faz a requisição e retorna o valor da cotação de venda.
+            Caso a API não tenha cotação registrada para o dia solicitado (por exemplo feriados ou finais de semana), o sistema volta um dia e tenta novamente até encontrar um dia válido.
+            No final, ele cria uma lista com as cotações correspondentes para várias datas passadas e imprime o resultado.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>Essa função converte uma data no formato MMDDYYYY para o formato MM-DD-YYYY, que é o formato exigido pela API.</p>
+            <pre><code>
+def formatar_data(data_str):
+    dt = datetime.strptime(data_str, "%m%d%Y")
+    return dt.strftime("%m-%d-%Y")
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>Essa função retorna a data imediatamente anterior à fornecida, ainda no formato MMDDYYYY. Ela só diminui um dia e devolve no mesmo formato original.</p>
+            <pre><code>
+def dia_anterior(data_str):
+    dt = datetime.strptime(data_str, "%m%d%Y") - timedelta(days=1)
+    return dt.strftime("%m%d%Y")
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 3 — Explicação</h3>
+            <p>Essa função busca a cotação do dólar para uma data.
+                Primeiro formata a data para o padrão da API.
+                Depois faz a requisição HTTP ao Banco Central.
+                Se existir valor para aquele dia, retorna a cotação.
+                Se não existir, chama a si mesma usando o dia anterior até encontrar uma data válida.
+                No fim, cria uma lista de datas e aplica a função cotar em cada uma, produzindo uma lista com as cotações correspondentes. Depois imprime o resultado.</p>
+            <pre><code>
+def cotar(data_str):
+    data_ptax = formatar_data(data_str)
+
+    url = (
+        "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+        f"CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{data_ptax}'&$format=json"
+    )
+
+    res = requests.get(url).json()
+
+    if res.get("value"):
+        return float(res["value"][0]["cotacaoVenda"])
+
+    return cotar(dia_anterior(data_str))
+
+    resultados = [cotar(i) for i in ["09022024", "09012024", "08312024", "08302024", "08292024"]]
+    print(resultados)
+            </code></pre>
+        </div>
+    </section>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+from datetime import datetime, timedelta
+import requests
+
+def formatar_data(data_str):
+    dt = datetime.strptime(data_str, "%m%d%Y")
+    return dt.strftime("%m-%d-%Y")
+
+def dia_anterior(data_str):
+    dt = datetime.strptime(data_str, "%m%d%Y") - timedelta(days=1)
+    return dt.strftime("%m%d%Y")
+
+def cotar(data_str):
+    data_ptax = formatar_data(data_str)
+
+    url = (
+        "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+        f"CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{data_ptax}'&$format=json"
+    )
+
+    res = requests.get(url).json()
+
+    if res.get("value"):
+        return float(res["value"][0]["cotacaoVenda"])
+
+    return cotar(dia_anterior(data_str))
+
+resultados = [cotar(i) for i in ["09022024", "09012024", "08312024", "08302024", "08292024"]]
+print(resultados)
+        </code></pre>
+    </section>
+</body>
+</html>

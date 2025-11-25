@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatorial & Fibonacci</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Fatorial & Fibonacci</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Exercicios_Geral/fatorial_fibonacci.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            O sistema define três funções recursivas: uma para calcular o fatorial, outra para calcular números de Fibonacci e outra para somar todos os elementos de uma lista.
+            Cada função usa recursão, ou seja, chama a si mesma reduzindo o problema até chegar em um caso base simples.
+            No final, o sistema apenas testa cada função com valores fixos, mostrando seus resultados na tela.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>Essa função calcula o fatorial de um número usando recursão.
+                Se o número for 0, retorna 1. Caso contrário, multiplica o número pelo fatorial do número anterior.</p>
+            <pre><code>
+def fatorial(n):
+    if n == 0:
+        return 1
+    return n * fatorial(n - 1)
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>Essa função calcula o n-ésimo número de Fibonacci.
+                Se n for 0 ou 1, apenas retorna n.
+                Para valores maiores, soma o Fibonacci dos dois números anteriores.</p>
+            <pre><code>
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 3 — Explicação</h3>
+            <p>Essa função soma os elementos de uma lista recursivamente.
+                Se a lista estiver vazia, retorna 0.
+                Senão, soma o primeiro elemento com o resultado da soma do restante da lista. O final do programa apenas chama cada função com valores específicos e imprime o resultado na tela.</p>
+            <pre><code>
+def soma_lista(lista):
+    if not lista:
+        return 0
+    return lista[0] + soma_lista(lista[1:])
+
+print("Fatorial(5):", fatorial(5))
+print("Fibonacci(8):", fibonacci(8))
+print("Soma da lista [1,2,3,4,5]:", soma_lista([1,2,3,4,5]))
+            </code></pre>
+        </div>
+    </section>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+def fatorial(n):
+    if n == 0:
+        return 1
+    return n * fatorial(n - 1)
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+def soma_lista(lista):
+    if not lista:
+        return 0
+    return lista[0] + soma_lista(lista[1:])
+
+print("Fatorial(5):", fatorial(5))
+print("Fibonacci(8):", fibonacci(8))
+print("Soma da lista [1,2,3,4,5]:", soma_lista([1,2,3,4,5]))
+        </code></pre>
+    </section>
+</body>
+</html>

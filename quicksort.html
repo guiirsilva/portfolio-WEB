@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenação por Seleção & Quicksort</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Ordenação por Seleção & Quicksort</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Exercicios_Geral/ordenacao_quicksort.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            O sistema compara o desempenho de três formas diferentes de ordenar uma lista de números: ordenação por seleção, quicksort e o método interno do Python (sorted()). 
+            Primeiro ele define as funções de ordenação, depois cria uma lista aleatória de 1000 números e mede o tempo de execução de cada método usando cópias da mesma lista. 
+            Por fim, imprime os tempos para comparação.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>As duas funções abaixo definem os algoritmos de ordenação.
+A primeira percorre a lista procurando o menor elemento e trocando de posição — é simples, mas lenta.
+A segunda implementa o quicksort dividindo a lista em menores, iguais e maiores que o pivô, chamando a si mesma para ordenar as partes menores e maiores.</p>
+            <pre><code>
+def ordenacao_selecao(lista):
+    for i in range(len(lista)):
+        menor = i
+        for j in range(i+1, len(lista)):
+            if lista[j] < lista[menor]:
+                menor = j
+        lista[i], lista[menor] = lista[menor], lista[i]
+    return lista
+
+def quicksort(lista):
+    if len(lista) <= 1:
+        return lista
+    pivo = lista[len(lista)//2]
+    esquerda = [x for x in lista if x < pivo]
+    meio = [x for x in lista if x == pivo]
+    direita = [x for x in lista if x > pivo]
+    return quicksort(esquerda) + meio + quicksort(direita)
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>Este trecho cria a lista aleatória, mede o tempo de cada algoritmo usando time.time() antes e depois da execução, calcula a diferença e por fim imprime o tempo gasto 
+                por cada método.</p>
+            <pre><code>
+lista = random.sample(range(10000), 1000)
+
+inicio = time.time()
+ordenacao_selecao(lista[:])
+tempo_sel = time.time() - inicio
+
+inicio = time.time()
+quicksort(lista[:])
+tempo_quick = time.time() - inicio
+
+inicio = time.time()
+sorted(lista)
+tempo_sorted = time.time() - inicio
+
+print("Seleção:", tempo_sel)
+print("Quicksort:", tempo_quick)
+print("sorted():", tempo_sorted)
+            </code></pre>
+        </div>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+import time
+import random
+
+def ordenacao_selecao(lista):
+    for i in range(len(lista)):
+        menor = i
+        for j in range(i+1, len(lista)):
+            if lista[j] < lista[menor]:
+                menor = j
+        lista[i], lista[menor] = lista[menor], lista[i]
+    return lista
+
+def quicksort(lista):
+    if len(lista) <= 1:
+        return lista
+    pivo = lista[len(lista)//2]
+    esquerda = [x for x in lista if x < pivo]
+    meio = [x for x in lista if x == pivo]
+    direita = [x for x in lista if x > pivo]
+    return quicksort(esquerda) + meio + quicksort(direita)
+
+lista = random.sample(range(10000), 1000)
+
+inicio = time.time()
+ordenacao_selecao(lista[:])
+tempo_sel = time.time() - inicio
+
+inicio = time.time()
+quicksort(lista[:])
+tempo_quick = time.time() - inicio
+
+inicio = time.time()
+sorted(lista)
+tempo_sorted = time.time() - inicio
+
+print("Seleção:", tempo_sel)
+print("Quicksort:", tempo_quick)
+print("sorted():", tempo_sorted)
+        </code></pre>
+    </section>
+</body>
+</html>

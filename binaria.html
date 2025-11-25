@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa Sequencial & Binária</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Pesquisa Sequencial & Binária</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Exercicios_Geral/sequencial_binaria.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            O sistema compara o desempenho entre dois métodos de busca em listas: pesquisa sequencial e pesquisa binária. Ele mede quantas comparações cada método realiza e 
+            quanto tempo demora para encontrar um valor dentro de uma lista previamente ordenada. Primeiro são definidas as funções de busca, depois é criada uma lista 
+            aleatória ordenada e selecionado um valor dela para ser procurado. Cada busca é executada separadamente, com medição de tempo, e ao final os resultados são exibidos.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>A pesquisa sequencial percorre a lista do início ao fim, comparando cada elemento com o valor desejado. Já a pesquisa binária busca de forma mais eficiente: divide a lista ao meio repetidamente, descartando metade do intervalo a cada comparação. 
+                Cada função retorna a posição onde encontrou o valor e a quantidade de comparações feitas.</p>
+            <pre><code>
+def pesquisa_sequencial(lista, valor):
+    comparacoes = 0
+    for i, v in enumerate(lista):
+        comparacoes += 1
+        if v == valor:
+            return i, comparacoes
+    return -1, comparacoes
+
+def pesquisa_binaria(lista, valor):
+    inicio, fim = 0, len(lista) - 1
+    comparacoes = 0
+    while inicio <= fim:
+        meio = (inicio + fim) // 2
+        comparacoes += 1
+        if lista[meio] == valor:
+            return meio, comparacoes
+        elif lista[meio] < valor:
+            inicio = meio + 1
+        else:
+            fim = meio - 1
+    return -1, comparacoes
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>A lista é criada com 100 números aleatórios sem repetição e ordenada. Um valor aleatório da lista é escolhido para ser pesquisado. Cada método é testado separadamente com 
+                medição do tempo usando time.time(). Ao final, são impressas as comparações feitas e o tempo gasto por cada busca.</p>
+            <pre><code>
+lista = sorted(random.sample(range(1000), 100))
+valor = random.choice(lista)
+
+inicio = time.time()
+_, comp_seq = pesquisa_sequencial(lista, valor)
+tempo_seq = time.time() - inicio
+
+inicio = time.time()
+_, comp_bin = pesquisa_binaria(lista, valor)
+tempo_bin = time.time() - inicio
+
+print("Pesquisa Sequencial -> Valor:", valor, "Comparações:", comp_seq, "Tempo:", tempo_seq)
+print("Pesquisa Binária -> Valor", valor, "Comparações:", comp_bin, "Tempo:", tempo_bin)
+            </code></pre>
+        </div>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+import time
+import random
+
+def pesquisa_sequencial(lista, valor):
+    comparacoes = 0
+    for i, v in enumerate(lista):
+        comparacoes += 1
+        if v == valor:
+            return i, comparacoes
+    return -1, comparacoes
+
+def pesquisa_binaria(lista, valor):
+    inicio, fim = 0, len(lista) - 1
+    comparacoes = 0
+    while inicio <= fim:
+        meio = (inicio + fim) // 2
+        comparacoes += 1
+        if lista[meio] == valor:
+            return meio, comparacoes
+        elif lista[meio] < valor:
+            inicio = meio + 1
+        else:
+            fim = meio - 1
+    return -1, comparacoes
+
+lista = sorted(random.sample(range(1000), 100))
+valor = random.choice(lista)
+
+inicio = time.time()
+_, comp_seq = pesquisa_sequencial(lista, valor)
+tempo_seq = time.time() - inicio
+
+inicio = time.time()
+_, comp_bin = pesquisa_binaria(lista, valor)
+tempo_bin = time.time() - inicio
+
+print("Pesquisa Sequencial -> Valor:", valor, "Comparações:", comp_seq, "Tempo:", tempo_seq)
+print("Pesquisa Binária -> Valor", valor, "Comparações:", comp_bin, "Tempo:", tempo_bin)
+        </code></pre>
+    </section>
+</body>
+</html>

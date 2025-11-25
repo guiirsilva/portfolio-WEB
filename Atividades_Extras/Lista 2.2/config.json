@@ -1,0 +1,9 @@
+{
+    "nome": "MeuApp",
+    "versao": "1.0.3",
+    "parametros": {
+        "debug": true,
+        "max_tentativas": 5,
+        "timeout": 30
+    }
+}
