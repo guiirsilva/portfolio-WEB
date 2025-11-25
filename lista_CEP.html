@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultor de CEP</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Consultor de CEP</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Exercicios_Geral/lista_CEP.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            O sistema consulta a API ViaCEP para obter informações sobre vários CEPs. A função consulta_cep acessa a API e retorna o logradouro e a UF de cada CEP válido. Em seguida, 
+            o programa percorre uma lista de CEPs e usa uma compreensão de lista para selecionar apenas aqueles que pertencem ao estado de São Paulo (“SP”), guardando somente o 
+            logradouro desses resultados. No final, imprime a lista de logradouros filtrados.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>A função recebe um CEP, consulta a API e retorna o logradouro e o estado. Se o CEP for inválido, ela retorna None.</p>
+            <pre><code>
+def consulta_cep(cep):
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    res = requests.get(url).json()
+
+    if "erro" in res:
+        return None
+
+    logradouro = res.get("logradouro", "")
+    uf = res.get("uf", "")
+
+    return (logradouro, uf)
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>Aqui está apenas a lista de CEPs que serão consultados pela função.</p>
+            <pre><code>
+lista_cep = [
+    "13186642",
+    "13178574",
+    "13188020",
+    "13184321",
+    "20720293"]
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 3 — Explicação</h3>
+            <p>Este trecho consulta cada CEP, pega os dados retornados e mantém apenas os logradouros de CEPs cuja UF seja “SP”. Depois apenas imprime o resultado final.</p>
+            <pre><code>
+resultado = [
+    dados[0]              
+    for cep in lista_cep
+    for dados in [consulta_cep(cep)]
+    if dados and dados[1] == "SP"
+]
+
+print(resultado)
+            </code></pre>
+        </div>
+    </section>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+import requests
+
+def consulta_cep(cep):
+    url = f"https://viacep.com.br/ws/{cep}/json/"
+    res = requests.get(url).json()
+
+    if "erro" in res:
+        return None
+
+    logradouro = res.get("logradouro", "")
+    uf = res.get("uf", "")
+
+    return (logradouro, uf)
+
+lista_cep = [
+    "13186642",
+    "13178574",
+    "13188020",
+    "13184321",
+    "20720293"]
+
+resultado = [
+    dados[0]              
+    for cep in lista_cep
+    for dados in [consulta_cep(cep)]
+    if dados and dados[1] == "SP"
+]
+
+print(resultado)
+        </code></pre>
+    </section>
+</body>
+</html>

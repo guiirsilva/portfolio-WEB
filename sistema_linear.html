@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sistemas Lineares</title>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="titulo-projeto">Calculadora de Sistemas Lineares</h1>
+        <a id="btn-github" href="https://github.com/guiirsilva/portfolio-WEB/blob/main/Calculadora_SistemasLineares/sistemas_lineares.py" target="_blank" class="botao-github">Ver no GitHub</a>
+        <a id="btn-voltar" href="index.html" class="botao-github">Voltar ao Início</a>
+    </header>
+
+    <section class="descricao">
+        <h2>Descrição</h2>
+        <p>
+            O sistema lê um sistema linear digitado pelo usuário, monta a matriz aumentada, imprime o sistema inicial, escalona a matriz 
+            usando eliminação de Gauss e depois resolve o sistema usando substituição regressiva. Ele também identifica quando o sistema 
+            não tem solução ou quando possui infinitas soluções. Por fim, a função main() organiza todos os passos e mostra o resultado final.
+        </p>
+    </section>
+
+    <section class="explicacao-codigo">
+        <h2>Explicação do Código</h2>
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 1 — Explicação</h3>
+            <p>Este trecho lê o tamanho do sistema e todos os coeficientes informados pelo usuário, 
+               construindo a matriz aumentada. Ele valida o valor de n e coleta os valores de A e B antes de retornar a matriz completa.</p>
+            <pre><code>
+def ler_sistema():
+    while True:
+        try:
+            n = int(input("Digite o tamanho do sistema (máximo 10): "))
+            if 1 <= n <= 10:
+                break
+            else:
+                print("Tamanho inválido. Digite um valor entre 1 e 10.")
+        except ValueError:
+            print("Entrada inválida. Digite um número inteiro.")
+
+    matriz = []
+    print("\nDigite os coeficientes e termos independentes:")
+    for i in range(n):
+        linha = []
+        for j in range(n):
+            a = float(input(f"A[{i+1}][{j+1}]: "))
+            linha.append(a)
+        b = float(input(f"B[{i+1}]: "))
+        linha.append(b)
+        matriz.append(linha)
+
+    return matriz, n 
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 2 — Explicação</h3>
+            <p>Este trecho imprime o sistema linear de forma organizada. Ele monta uma 
+               expressão para cada linha da matriz, mostrando coeficientes multiplicando 
+               variáveis e o termo independente no final. Depois o programa faz o escalonamento da matriz. Ele troca linhas se o pivô for zero e elimina 
+               os elementos abaixo do pivô dividindo e subtraindo linhas conforme o método de Gauss.</p>
+            <pre><code>
+def imprimir_sistema(matriz, n, titulo):
+    print(f"\n{titulo}:")
+    for i in range(n):
+        linha = " + ".join([f"{matriz[i][j]:.2f}*x{j+1}" for j in range(n)])
+        linha += f" = {matriz[i][n]:.2f}" 
+        print(linha)
+
+def escalonar(matriz, n):
+    for i in range(n):
+        if matriz[i][i] == 0:
+            for k in range(i + 1, n):
+                if matriz[k][i] != 0:
+                    matriz[i], matriz[k] = matriz[k], matriz[i]
+                    break
+
+        if matriz[i][i] == 0:
+            continue
+
+        for j in range(i + 1, n):
+            fator = matriz[j][i] / matriz[i][i]
+            for k in range(i, n + 1):
+                matriz[j][k] -= fator * matriz[i][k]
+    return matriz
+            </code></pre>
+        </div>
+
+        <div class="bloco-explicacao">
+            <h3>🔹 Parte 3 — Explicação</h3>
+            <p>Aqui acontece a substituição regressiva. O código resolve as variáveis de baixo para cima. Também 
+               verifica se a equação é impossível ou se indica infinitas soluções. Por último, o programa coordena todo o processo: lê o sistema, imprime, escalona, imprime novamente e resolve. Depois mostra o tipo de solução encontrada.</p>
+            <pre><code>
+def resolver(matriz, n):
+    x = [0] * n  
+    for i in range(n - 1, -1, -1):
+        if matriz[i][i] == 0:
+            if abs(matriz[i][n]) > 1e-6:
+                return None
+            else:
+                return "infinita"
+        soma = sum(matriz[i][j] * x[j] for j in range(i + 1, n))
+        x[i] = (matriz[i][n] - soma) / matriz[i][i] 
+    return x 
+
+def main():
+    matriz, n = ler_sistema() 
+    imprimir_sistema(matriz, n, "Sistema original") 
+
+    matriz_escalonada = [linha[:] for linha in matriz]
+    matriz_escalonada = escalonar(matriz_escalonada, n)
+    imprimir_sistema(matriz_escalonada, n, "Sistema escalonado")
+
+    solucao = resolver(matriz_escalonada, n)
+    if solucao is None:
+        print("\n O sistema é impossível (sem solução).")
+    elif solucao == "infinita":
+        print("\n O sistema possui infinitas soluções.")
+    else:
+        print("\n Solução do sistema:")
+        for i in range(n):
+            print(f"x{i+1} = {solucao[i]:.4f}")
+
+if __name__ == "__main__":
+    main()
+            </code></pre>
+        </div>
+    </section>
+
+    <section class="codigo-completo">
+        <h2>Código Completo</h2>
+        <pre><code>
+def ler_sistema():
+    while True:
+        try:
+            n = int(input("Digite o tamanho do sistema (máximo 10): "))
+            if 1 <= n <= 10:
+                break
+            else:
+                print("Tamanho inválido. Digite um valor entre 1 e 10.")
+        except ValueError:
+            print("Entrada inválida. Digite um número inteiro.")
+
+    matriz = []
+    print("\nDigite os coeficientes e termos independentes:")
+    for i in range(n):
+        linha = []
+        for j in range(n):
+            a = float(input(f"A[{i+1}][{j+1}]: "))
+            linha.append(a)
+        b = float(input(f"B[{i+1}]: "))
+        linha.append(b)
+        matriz.append(linha)
+
+    return matriz, n 
+
+def imprimir_sistema(matriz, n, titulo):
+    print(f"\n{titulo}:")
+    for i in range(n):
+        linha = " + ".join([f"{matriz[i][j]:.2f}*x{j+1}" for j in range(n)])
+        linha += f" = {matriz[i][n]:.2f}" 
+        print(linha)
+
+def escalonar(matriz, n):
+    for i in range(n):
+        if matriz[i][i] == 0:
+            for k in range(i + 1, n):
+                if matriz[k][i] != 0:
+                    matriz[i], matriz[k] = matriz[k], matriz[i]
+                    break
+
+        if matriz[i][i] == 0:
+            continue
+
+        for j in range(i + 1, n):
+            fator = matriz[j][i] / matriz[i][i]
+            for k in range(i, n + 1):
+                matriz[j][k] -= fator * matriz[i][k]
+    return matriz 
+
+def resolver(matriz, n):
+    x = [0] * n  
+    for i in range(n - 1, -1, -1):
+        if matriz[i][i] == 0:
+            if abs(matriz[i][n]) > 1e-6:
+                return None
+            else:
+                return "infinita"
+        soma = sum(matriz[i][j] * x[j] for j in range(i + 1, n))
+        x[i] = (matriz[i][n] - soma) / matriz[i][i] 
+    return x 
+
+def main():
+    matriz, n = ler_sistema() 
+    imprimir_sistema(matriz, n, "Sistema original") 
+
+    matriz_escalonada = [linha[:] for linha in matriz]
+    matriz_escalonada = escalonar(matriz_escalonada, n)
+    imprimir_sistema(matriz_escalonada, n, "Sistema escalonado")
+
+    solucao = resolver(matriz_escalonada, n)
+    if solucao is None:
+        print("\n O sistema é impossível (sem solução).")
+    elif solucao == "infinita":
+        print("\n O sistema possui infinitas soluções.")
+    else:
+        print("\n Solução do sistema:")
+        for i in range(n):
+            print(f"x{i+1} = {solucao[i]:.4f}")
+
+if __name__ == "__main__":
+    main()
+        </code></pre>
+    </section>
+</body>
+</html>

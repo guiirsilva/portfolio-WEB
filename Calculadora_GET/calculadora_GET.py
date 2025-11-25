@@ -1,9 +1,7 @@
 import customtkinter as ctk
 
-#Aparência da janela
 ctk.set_appearance_mode("dark")
 
-#Arrays
 descricoes_atividade = {
     "Sedentário": "Nenhuma atividade física regular",
     "Leve": "Exercício leve 1–3 vezes/semana",
@@ -12,7 +10,6 @@ descricoes_atividade = {
     "Muito intenso": "Treino duplo ou trabalho físico pesado"
 }
 
-#Funções
 def tmb():
     try:
         sexo = campo_sexo.get()
@@ -57,7 +54,6 @@ def tmb():
     except ValueError:
         label_erro.configure(text="Por favor, preencha todos os campos!", text_color="red")
 
-#Janela
 app = ctk.CTk()
 app.title("Calculadora de GET")
 app.geometry("300x500")
@@ -67,7 +63,6 @@ def mostrar_pagina(pagina):
         frame.pack_forget()
     pagina.pack(fill="both", expand=True)
 
-#Pagina 1
 pagina1 = ctk.CTkFrame(app)
 
 label = ctk.CTkLabel(pagina1, text='Calculadora de Gasto Energetico Total' \
@@ -112,7 +107,6 @@ botao_calcular.pack(pady=(20, 0))
 label_erro = ctk.CTkLabel(pagina1, text='', font=("Arial", 12), text_color='white')
 label_erro.pack(pady=4)
 
-#Pagina 2 
 pagina2 = ctk.CTkFrame(app)
 
 label_titulo = ctk.CTkLabel(pagina2, text='Resultado', font=("Arial", 16, "bold"))
@@ -180,7 +174,6 @@ label_recomendacao.pack(pady=3)
 botao_voltar = ctk.CTkButton(pagina2, text="Voltar", command=lambda: [mostrar_pagina(pagina1), label_erro.configure(text="")])
 botao_voltar.pack(pady=20)
 
-#Começa na página 1
 mostrar_pagina(pagina1)
 
 app.mainloop()

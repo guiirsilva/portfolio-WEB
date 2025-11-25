@@ -1,0 +1,3 @@
+Este é um arquivo de exemplo.
+Ele contém algumas linhas e palavras.
+Use-o para testar a contagem de linhas e palavras.
